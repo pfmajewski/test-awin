@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        container_name: php
+        image: test
+        environment:
+            PHP_IDE_CONFIG: "serverName=test-awin.php"
+        volumes:
+            - ./:/var/www/html
