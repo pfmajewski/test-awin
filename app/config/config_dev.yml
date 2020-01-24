@@ -1,11 +1,6 @@
 imports:
     - { resource: config.yml }
 
-framework:
-    router:
-        resource: '%kernel.project_dir%/app/config/routing_dev.yml'
-        strict_requirements: true
-    profiler: { only_exceptions: false }
 
 monolog:
     handlers:
@@ -33,5 +28,3 @@ monolog:
         #    type: chromephp
         #    level: info
 
-#swiftmailer:
-#    delivery_addresses: ['me@example.com']

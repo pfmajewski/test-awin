@@ -39,7 +39,7 @@ RUN pecl install xdebug \
 
 # Setup php
 RUN echo "date.timezone=UTC"                >  /usr/local/etc/php/conf.d/timezone.ini \
-    && echo "memory_limit=128M"             >  /usr/local/etc/php/conf.d/memory.ini \
+    && echo "memory_limit=-1"               >  /usr/local/etc/php/conf.d/memory.ini \
     && echo "phar.readonly = false"         > /usr/local/etc/php/conf.d/phar.ini
 
 # Install composer

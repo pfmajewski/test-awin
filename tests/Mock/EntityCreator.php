@@ -1,12 +1,13 @@
 <?php
 
-
 namespace Tests\Mock;
-
 
 use AppBundle\Entity\Currency;
 use AppBundle\Entity\Merchant;
 
+/**
+ * Class EntityCreator
+ */
 class EntityCreator
 {
     /**

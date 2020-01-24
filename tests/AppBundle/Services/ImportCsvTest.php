@@ -10,7 +10,6 @@ use Tests\Mock\EntityCreator;
 
 class ImportCsvTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @return array
      */
@@ -56,7 +55,6 @@ class ImportCsvTest extends \PHPUnit_Framework_TestCase
         array $inRow,
         Transaction $expTransaction
     ) {
-
         $importCsv = new ImportCsv($inCurrencyRepository, $inMerchantRepository);
 
         $outTransaction = $importCsv->readRow($inRow);
