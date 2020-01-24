@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\Merchant;
 use AppBundle\Entity\Transaction;
 use AppBundle\EntityRepository\CurrencyRepository;
 use AppBundle\EntityRepository\MerchantRepository;
@@ -42,18 +43,20 @@ class ImportCsv
     {
         $transaction = new Transaction();
 
-
         $merchant = $this->merchantRepository->find($row[0]);
+        if ($merchant == null) {
+            $merchant = new Merchant();
+            $merchant->setName($row[0]);
+            $this->merchantRepository->register($merchant);
+        }
 
-        $currency = $this->currencyRepository->findOneBySymbol(substr($row[2], 0, 1));
+        $symbol = mb_substr($row[2], 0, 1);
+        $currency = $this->currencyRepository->findOneBySymbol($symbol);
 
         $transaction->setMerchant($merchant);
         $transaction->setCurrency($currency);
-        $transaction->setValue(substr($row[2],1));
+        $transaction->setValue(mb_substr($row[2],1));
         $transaction->setDate(new \DateTime($row[1]));
-
-
-
 
         return $transaction;
     }

@@ -17,7 +17,7 @@ class EntityCreator
      *
      * @return Currency
      */
-    public static function createCurrency(int $id, string $symbol, string $isoCode)
+    public static function createCurrency(int $id, string $symbol, string $isoCode): Currency
     {
         $currency = new Currency();
         $currency->setSymbol($symbol);
@@ -37,7 +37,7 @@ class EntityCreator
      *
      * @return Merchant
      */
-    public static function createMerchant(int $id, string $name)
+    public static function createMerchant(int $id, string $name): Merchant
     {
         $merchant = new Merchant();
         $merchant->setName($name);

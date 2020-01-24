@@ -2,13 +2,15 @@
 
 namespace Tests\AppBundle\Services;
 
+use AppBundle\Entity\Merchant;
 use AppBundle\Entity\Transaction;
 use AppBundle\EntityRepository\CurrencyRepository;
 use AppBundle\EntityRepository\MerchantRepository;
 use AppBundle\Services\ImportCsv;
 use Tests\Mock\EntityCreator;
+use PHPUnit\Framework\TestCase;
 
-class ImportCsvTest extends \PHPUnit_Framework_TestCase
+class ImportCsvTest extends TestCase
 {
     /**
      * @return array
@@ -17,11 +19,19 @@ class ImportCsvTest extends \PHPUnit_Framework_TestCase
     {
         $data = [];
 
-        $data['test-01'] = [
-            '$inCurrencyRepository' => $this->getMock(CurrencyRepository::class, ['findOneBySymbol'], [], '', false),
-            '$inMerchantRepository' => $this->getMock(MerchantRepository::class, ['find'], [], '', false),
-            '$inRow' => ['1', '01/05/2010', '$10.01'],
-            '$expTransaction' =>
+        $inCurrencyRepository = 0;
+        $inMerchantRepository = 1;
+        $inRow = 2;
+        $expTransaction = 3;
+
+        // Test existing merchant
+        $data['test-create-existing-merchant'] = [
+            $inCurrencyRepository => $this->getMockBuilder(CurrencyRepository::class)
+                ->setMethods(['findOneBySymbol'])->disableOriginalConstructor()->getMock(),
+            $inMerchantRepository => $this->getMockBuilder(MerchantRepository::class)
+                ->setMethods(['find'])->disableOriginalConstructor()->getMock(),
+            $inRow => ['1', '01/05/2010', '$10.01'],
+            $expTransaction =>
                 (new Transaction())
                     ->setCurrency(EntityCreator::createCurrency(1, '$', 'USD'))
                     ->setMerchant(EntityCreator::createMerchant(1, 'name'))
@@ -29,14 +39,44 @@ class ImportCsvTest extends \PHPUnit_Framework_TestCase
                     ->setDate(new \DateTime('2010-01-05 00:00:00'))
             ,
         ];
-        $data['test-01']['$inCurrencyRepository']->expects(self::once())
+        $data['test-create-existing-merchant'][$inCurrencyRepository]->expects(self::once())
             ->method('findOneBySymbol')
             ->with('$')
             ->willReturn(EntityCreator::createCurrency(1, '$', 'USD'));
-        $data['test-01']['$inMerchantRepository']->expects(self::once())
+        $data['test-create-existing-merchant'][$inMerchantRepository]->expects(self::once())
             ->method('find')
             ->with(1)
             ->willReturn(EntityCreator::createMerchant(1, 'name'));
+
+        // Test new merchant
+        $data['test-create-new-merchant'] = [
+            $inCurrencyRepository => $this->getMockBuilder(CurrencyRepository::class)
+                ->setMethods(['findOneBySymbol'])->disableOriginalConstructor()->getMock(),
+            $inMerchantRepository => $this->getMockBuilder(MerchantRepository::class)
+                ->setMethods(['find', 'register'])->disableOriginalConstructor()->getMock(),
+            $inRow => ['1', '01/05/2010', '£50.00'],
+            $expTransaction =>
+                (new Transaction())
+                    ->setCurrency(EntityCreator::createCurrency(1, '£', 'GBP'))
+                    ->setMerchant((new Merchant())->setName('1'))
+                    ->setValue('50.00')
+                    ->setDate(new \DateTime('2010-01-05 00:00:00'))
+            ,
+        ];
+        $data['test-create-new-merchant'][$inCurrencyRepository]->expects(self::once())
+            ->method('findOneBySymbol')
+            ->with('£')
+            ->willReturn(EntityCreator::createCurrency(1, '£', 'GBP'));
+        $data['test-create-new-merchant'][$inMerchantRepository]->expects(self::once())
+            ->method('find')
+            ->with(1)
+            ->willReturn(null)
+        ;
+        $data['test-create-new-merchant'][$inMerchantRepository]->expects(self::once())
+            ->method('register')
+            ->with((new Merchant())->setName('1'))
+            ->willReturn($data['test-create-new-merchant'][$inMerchantRepository])
+        ;
 
         return $data;
     }
