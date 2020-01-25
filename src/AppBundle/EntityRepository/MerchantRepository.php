@@ -27,4 +27,15 @@ class MerchantRepository extends EntityRepository
 
         return $this;
     }
+
+    /**
+     * @param int $id
+     *
+     * @return Merchant
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function getReference(int $id): Merchant
+    {
+        return $this->_em->getReference(Merchant::class, $id);
+    }
 }

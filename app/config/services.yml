@@ -1,9 +1,7 @@
-# Learn more about services, parameters and containers at
-# https://symfony.com/doc/current/service_container.html
-parameters:
-    #parameter_name: value
 
 services:
+
+    # Repositories
 
     app.repository.currency:
         class: AppBundle\EntityRepository\CurrencyRepository
@@ -23,12 +21,35 @@ services:
         arguments:
             - AppBundle\Entity\Transaction
 
+
+    # Services
+
+    app.services.currency_converter:
+        class: AppBundle\Services\CurrencyConverter
+        arguments: ['@app.services.currency_webservice', true]
+
+    app.services.currency_webservice:
+        class: AppBundle\Services\CurrencyWebservice
+
     app.services.import_csv:
         class: AppBundle\Services\ImportCsv
         arguments: ['@app.repository.currency', '@app.repository.merchant']
 
+    app.services.transaction_report:
+        class: AppBundle\Services\TransactionReport
+        arguments: ['@app.services.currency_converter', '@app.repository.transaction']
+
+
+    # Commands
+
     app.command.app_import_csv_command:
         class: AppBundle\Command\ImportCsvCommand
         arguments: ['@app.services.import_csv', '@app.repository.transaction']
+        tags:
+            - { name: console.command }
+
+    app.command.get_report_command:
+        class: AppBundle\Command\GetReportCommand
+        arguments: ['@app.services.transaction_report', '@app.repository.currency', '@app.repository.merchant']
         tags:
             - { name: console.command }

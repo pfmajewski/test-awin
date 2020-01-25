@@ -46,7 +46,6 @@ class ImportCsvCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('app:import-csv')
             ->setDescription('Import transaction from csv file. Format (semicolon separated values): merchant;date;value')
             ->addArgument('csv-file-path', InputArgument::REQUIRED, 'Path to csv file')
             ->addOption('import-first-line', null, InputOption::VALUE_NONE, 'Import first line')
