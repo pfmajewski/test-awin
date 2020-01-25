@@ -4,6 +4,7 @@ namespace Tests\Mock;
 
 use AppBundle\Entity\Currency;
 use AppBundle\Entity\Merchant;
+use AppBundle\Entity\Transaction;
 
 /**
  * Class EntityCreator
@@ -50,4 +51,26 @@ class EntityCreator
         return $merchant;
     }
 
+    /**
+     * @param int       $id
+     * @param Merchant  $merchant
+     * @param \DateTime $date
+     * @param Currency  $currency
+     * @param string    $amount
+     *
+     * @return Transaction
+     * @throws \ReflectionException
+     */
+    public static function createTransaction(int $id, Merchant $merchant, \DateTime $date, Currency $currency, string $amount): Transaction
+    {
+        $transaction = new Transaction();
+        $transaction->setMerchant($merchant)->setDate($date)->setCurrency($currency)->setValue($amount);
+
+        $reflection = new \ReflectionClass(Transaction::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($transaction, $id);
+
+        return $transaction;
+    }
 }
