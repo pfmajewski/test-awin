@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class AppImportCsvCommand
+ * Class ImportCsvCommand
  */
-class AppImportCsvCommand extends Command
+class ImportCsvCommand extends Command
 {
     protected static $defaultName = 'app:import-csv';
 
@@ -28,7 +28,7 @@ class AppImportCsvCommand extends Command
     private $transactionRepository;
 
     /**
-     * AppImportCsvCommand constructor.
+     * ImportCsvCommand constructor.
      *
      * @param ImportCsv             $importCsvService
      * @param TransactionRepository $transactionRepository

@@ -28,7 +28,7 @@ services:
         arguments: ['@app.repository.currency', '@app.repository.merchant']
 
     app.command.app_import_csv_command:
-        class: AppBundle\Command\AppImportCsvCommand
+        class: AppBundle\Command\ImportCsvCommand
         arguments: ['@app.services.import_csv', '@app.repository.transaction']
         tags:
             - { name: console.command }
