@@ -73,7 +73,7 @@ class TransactionReport
      *
      * @return string
      */
-    public function formatCsv(array $items, $skipHeader = false, $columnSeparator = ';', $rowSeparator='\n\r'): string
+    public function formatCsv(array $items, $skipHeader = false, $columnSeparator = ';', $rowSeparator = "\n"): string
     {
         $results = [];
         if ($skipHeader == false) {

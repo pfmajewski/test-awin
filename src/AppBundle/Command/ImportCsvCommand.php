@@ -83,6 +83,6 @@ class ImportCsvCommand extends Command
             $this->transactionRepository->register($transaction);
         }
 
-        $output->writeln('Command result.');
+        $output->writeln('Import done. Imported ' . $row . ' transactions.');
     }
 }

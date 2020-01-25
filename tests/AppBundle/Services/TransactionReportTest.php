@@ -94,15 +94,15 @@ class TransactionReportTest extends TestCase
         // Test all default values:
         $outCsvDefault = $transactionReportService->formatCsv($inItems);
         self::assertEquals(
-            'date;amount'. '\n\r' . '01/01/2000;$123.45' . '\n\r' . '01/02/2000;£-3.20' . '\n\r' . '02/03/2000;€0.00',
+            'date;amount'. "\n" . '01/01/2000;$123.45' . "\n" . '01/02/2000;£-3.20' . "\n" . '02/03/2000;€0.00',
             $outCsvDefault,
             'Test of defaults'
         );
 
         // Test all default values:
-        $outCsvCustom = $transactionReportService->formatCsv($inItems, true, ',', '\n');
+        $outCsvCustom = $transactionReportService->formatCsv($inItems, true, ',', "\n\r");
         self::assertEquals(
-            '01/01/2000,$123.45' . '\n' . '01/02/2000,£-3.20' . '\n' . '02/03/2000,€0.00',
+            '01/01/2000,$123.45' . "\n\r" . '01/02/2000,£-3.20' . "\n\r" . '02/03/2000,€0.00',
             $outCsvCustom,
             'Test of custom parameters'
         );
