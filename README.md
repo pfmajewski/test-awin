@@ -7,6 +7,23 @@ Test AWIN
 Introduction
 ------------
 
+Project is build with Symfony 3.4. It uses Doctrine (with sqlite) for data manipulation. Docker is use to un entire application in isolation.
+
+The application offers interaction through command line. There are two commands available:
+
+1. `app:import-csv` that helps to load data into application
+2. `app:get-report` that generates transactions report in given currency
+
+Additionally:
+
+* There is a bash script to reset database `reset-data.sh` (usage below)
+* There is csv file with original data ready to import into database: `data/data.csv`
+
+Notes/changes/considerations regarding the original specs and current solution:
+
+1. Currency conversion accepts additionally date of exchange rate.
+2. Using newer Symfony (4 or 5) would allow to load much less components, but I'm not fluent in newer version.
+3. Unit tests are provided for services only, but should provide the idea of my skills level.
 
 
 
