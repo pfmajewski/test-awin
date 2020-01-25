@@ -22,6 +22,12 @@ services:
             - AppBundle\Entity\Transaction
 
 
+    # Data Fixtures
+    AppBundle\DataFixtures\:
+        resource: '../../src/AppBundle/DataFixtures'
+        tags: ['doctrine.fixture.orm']
+
+
     # Services
 
     app.services.currency_converter:
