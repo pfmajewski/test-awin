@@ -49,7 +49,17 @@ class TransactionReport
         $transactions = $this->transactionRepository->findByMerchant($merchant);
         foreach ($transactions as $transaction) {
             if ($transaction instanceof Transaction) {
-                // $reportItem =
+                if ($transaction->getCurrency() == $currency) {
+                    $amount = $transaction->getValue();
+                } else {
+                    $amount = $this->currencyConverter->convert(
+                        $dateExchangeRate,
+                        $transaction->getCurrency(),
+                        $currency,
+                        $transaction->getValue()
+                    );
+                }
+                $result[] = TransactionReportItem::create($transaction->getDate(), $currency, $amount);
             }
         }
 
