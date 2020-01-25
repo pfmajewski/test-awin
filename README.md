@@ -24,6 +24,7 @@ Notes/changes/considerations regarding the original specs and current solution:
 1. Currency conversion accepts additionally date of exchange rate.
 2. Using newer Symfony (4 or 5) would allow to load much less components, but I'm not fluent in newer version.
 3. Unit tests are provided for services only, but should provide the idea of my skills level.
+4. Docker configuration is for dev environment
 
 
 
