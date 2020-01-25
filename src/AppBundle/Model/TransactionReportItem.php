@@ -7,7 +7,7 @@ use AppBundle\Entity\Currency;
 /**
  * Class TransactionReportItem
  */
-class TransactionReportItem implements \JsonSerializable
+class TransactionReportItem
 {
     /**
      * The date of the transaction
@@ -41,29 +41,5 @@ class TransactionReportItem implements \JsonSerializable
         $item->currency = $currency;
         $item->amount = $amount;
         return $item;
-    }
-
-    /**
-     * Returns row of data in csv format. Amount is prefixed with currency symbol.
-     * @param string $separator
-     *
-     * @return string
-     */
-    public function getCsvRow($separator = ';'): string
-    {
-        $csv = $this->date->format('m/d/Y') . $separator . $this->currency->getSymbol() . $this->amount;
-        return $csv;
-    }
-
-    /**
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'date' => $this->date->format('Y-m-d'),
-            'currency' => $this->currency->getIsoCode(),
-            'amount' => $this->amount,
-        ];
     }
 }

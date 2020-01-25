@@ -46,23 +46,74 @@ class TransactionReport
     {
         $result = [];
 
+        /** @var Transaction[] $transactions */
         $transactions = $this->transactionRepository->findByMerchant($merchant);
         foreach ($transactions as $transaction) {
-            if ($transaction instanceof Transaction) {
-                if ($transaction->getCurrency() == $currency) {
-                    $amount = $transaction->getValue();
-                } else {
-                    $amount = $this->currencyConverter->convert(
-                        $dateExchangeRate,
-                        $transaction->getCurrency(),
-                        $currency,
-                        $transaction->getValue()
-                    );
-                }
-                $result[] = TransactionReportItem::create($transaction->getDate(), $currency, $amount);
+            if ($transaction->getCurrency() == $currency) {
+                $amount = $transaction->getValue();
+            } else {
+                $amount = $this->currencyConverter->convert(
+                    $dateExchangeRate,
+                    $transaction->getCurrency(),
+                    $currency,
+                    $transaction->getValue()
+                );
             }
+            $result[] = TransactionReportItem::create($transaction->getDate(), $currency, $amount);
         }
 
         return $result;
+    }
+
+    /**
+     * @param array  $items
+     * @param bool   $skipHeader
+     * @param string $columnSeparator
+     * @param string $rowSeparator
+     *
+     * @return string
+     */
+    public function formatCsv(array $items, $skipHeader = false, $columnSeparator = ';', $rowSeparator='\n\r'): string
+    {
+        $results = [];
+        if ($skipHeader == false) {
+            $results[] = 'date' . $columnSeparator . 'amount';
+        }
+
+        $i = 0;
+        foreach ($items as $item) {
+            if ($item instanceof TransactionReportItem) {
+                $results[] = $item->date->format('m/d/Y') . $columnSeparator . $item->currency->getSymbol() . $item->amount;
+            } else {
+                throw new \InvalidArgumentException("Item not instance of \AppBundle\Model\TransactionReportItem, index of: $i.");
+            }
+            $i++;
+        }
+
+        return implode($rowSeparator, $results);
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return string
+     */
+    public function formatJson(array $items): string
+    {
+        $json = [];
+        $i = 0;
+        foreach ($items as $item) {
+            if ($item instanceof TransactionReportItem) {
+                $json[] = [
+                    'date' => $item->date->format('Y-m-d'),
+                    'currency' => $item->currency->getIsoCode(),
+                    'amount' => $item->amount,
+                ];
+            } else {
+                throw new \InvalidArgumentException("Item not instance of \AppBundle\Model\TransactionReportItem, index of: $i.");
+            }
+            $i++;
+        }
+        return json_encode($json);
     }
 }
