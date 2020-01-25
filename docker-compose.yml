@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: docker/Dockerfile
         container_name: php
-        image: test
+        image: test-awin
         environment:
             PHP_IDE_CONFIG: "serverName=test-awin.php"
         volumes:
